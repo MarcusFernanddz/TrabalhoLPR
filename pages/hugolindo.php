@@ -45,12 +45,12 @@ if (isset($_POST['cadastrar'])):
 
     $erros = [];
 
-    // Validação da senha
+    
     if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/', $senha)) {
         $erros[] = "A senha deve ter no mínimo 8 caracteres, conter uma letra maiúscula, uma minúscula e um símbolo.";
     }
 
-    // Função CPF
+    
     function validaCPF($cpf) {
         $cpf = preg_replace('/[^0-9]/', '', $cpf); 
         if (strlen($cpf) != 11) return false;
@@ -70,12 +70,12 @@ if (isset($_POST['cadastrar'])):
     $is_email = filter_var($entrada, FILTER_VALIDATE_EMAIL);
     $is_telefone = preg_match('/^[0-9]{10,11}$/', $entrada);
 
-    // Validação da entrada
+    
     if (!$is_email && !$is_telefone && !$is_cpf) {
         $erros[] = "Digite um email, telefone ou CPF válido!";
     }
 
-    // Se houver erros, mostra todos
+    
     if (!empty($erros)) {
         foreach ($erros as $erro) {
             echo $erro . "<br>";
@@ -83,7 +83,7 @@ if (isset($_POST['cadastrar'])):
         exit;
     }
 
-    // Criptografia
+    
     if ($is_cpf) {
         $entrada_final = hash('sha256', $entrada);
     } else {
@@ -92,7 +92,7 @@ if (isset($_POST['cadastrar'])):
 
     $senha_final = password_hash($senha, PASSWORD_DEFAULT);
 
-    // Inserção
+    
     $sql = mysqli_query($conexao, 
         "INSERT INTO `teste`(`emailnumero`, `senha`) 
          VALUES ('$entrada_final','$senha_final')"
