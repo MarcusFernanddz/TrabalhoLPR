@@ -58,22 +58,22 @@
         $entrada = trim($_POST['emailnumero']);  
         $senha = trim($_POST['senha']);
 
-        // Identificar tipo de entrada
+        
         $is_cpf = validaCPF($entrada);
         $is_email = filter_var($entrada, FILTER_VALIDATE_EMAIL);
         $is_telefone = preg_match('/^[0-9]{10,11}$/', $entrada);
 
-        // Validação básica
+        
         if (!$is_email && !$is_telefone && !$is_cpf) {
             $erro = "Digite um email, telefone ou CPF válido!";
         } else {
 
-            // 🔥 Se for CPF → aplica SHA-256 (igual ao cadastro)
+            
             if ($is_cpf) {
                 $entrada = hash('sha256', $entrada);
             }
 
-            // Buscar no banco (seguro)
+            
             $stmt = $conexao->prepare("SELECT * FROM teste WHERE emailnumero = ?");
             $stmt->bind_param("s", $entrada);
             $stmt->execute();
@@ -81,7 +81,7 @@
 
             $usuario = $result->fetch_assoc();
 
-            // Verificação da senha
+            
             if ($usuario && password_verify($senha, $usuario['senha'])) {
 
                 $_SESSION['usuario_id'] = $usuario['id'];
